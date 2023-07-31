@@ -1,26 +1,30 @@
-import slider from './js/cards-slider';
-import {
-  hiddenCardsMiddleScreen,
-  hiddenCardsSmallScreen,
-  showAllCards
-} from './js/hidden-cards';
+import cardsAdaptation from './js/cards-adaptation';
+import Slider from './js/cards-slider';
 
-// cards slider
-$(document).ready(slider);
+//  ======== hidden cards ========
+cardsAdaptation();
+window.addEventListener('resize', cardsAdaptation);
 
-// hidden cards
-const cards = document.querySelectorAll('.article')
+// ======== cards slider ========
+const elementSlider = document.querySelector('.cards-slider');
+const slides = Array.from(elementSlider.querySelectorAll('.cards-slide'));
+const slider = new Slider(slides);
 
-window.addEventListener('resize', function() {
-  if (window.outerWidth >= 576 && window.outerWidth < 1200) {
-    hiddenCardsMiddleScreen(cards);
-  };
+// обновление слайдера при изменении ширины экрана
+window.addEventListener('resize', () => {
+  const slides = Array.from(elementSlider.querySelectorAll('.cards-slide'));
+  slider.setSlides(slides);
+  slider.updateSlider();
+});
 
-  if (window.outerWidth >= 1200) {
-    showAllCards(cards);
-  };
+// добавление прослушки на кнопки навигации
+const prevBtn = document.querySelector('.slider-prev');
+const nextBtn = document.querySelector('.slider-next');
 
-  if (window.outerWidth < 576) {
-    hiddenCardsSmallScreen(cards);
-  };
-})
+prevBtn.addEventListener('click', () => {
+  slider.showPrevSlide(elementSlider);
+});
+
+nextBtn.addEventListener('click', () => {
+  slider.showNextSlide(elementSlider);
+});
